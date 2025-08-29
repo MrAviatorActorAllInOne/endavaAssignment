@@ -1,0 +1,8 @@
+﻿bin/
+obj/
+.vs/
+*.db
+*.db-shm
+*.db-wal
+*.user
+*.log
