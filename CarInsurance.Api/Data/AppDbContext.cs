@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Car> Cars => Set<Car>();
     public DbSet<InsurancePolicy> Policies => Set<InsurancePolicy>();
     public DbSet<InsuranceClaim> Claims => Set<InsuranceClaim>();
+    public DbSet<PolicyExpirationLog> PolicyExpirationLogs => Set<PolicyExpirationLog>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +42,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .OnDelete(DeleteBehavior.Cascade);
 
             e.Property(x => x.ClaimDate).IsRequired();
+        });
+
+        modelBuilder.Entity<PolicyExpirationLog>(e =>
+        {
+            e.HasKey(x => x.Id);
+
+            e.HasOne(x => x.Policy)
+             .WithMany()
+             .HasForeignKey(x => x.PolicyId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasIndex(x => x.PolicyId).IsUnique();
         });
 
     }
